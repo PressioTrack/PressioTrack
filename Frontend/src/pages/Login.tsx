@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import styles from './Login.module.css';
-import {  Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const Login: React.FC = () => {
   const { login } = useAuth();
@@ -14,12 +14,18 @@ const Login: React.FC = () => {
     e.preventDefault();
     const result = await login(email, senha);
     if (result.ok) {
-      navigate('/dashboard'); 
+      navigate('/dashboard');
     }
-    else{
+    else {
       setErro(result.message || 'Erro ao fazer login');
     }
-    
+
+  };
+
+  const limparCampos = () => {
+    setEmail('');
+    setSenha('');
+    setErro('');
   };
 
   return (
@@ -47,18 +53,25 @@ const Login: React.FC = () => {
           />
 
 
-          <button
-            type="submit"
-            className="bg-green-600 text-white font-semibold py-2 px-4 rounded-lg"
-          >
-            Entrar
-          </button>
+           <div className="flex justify-between gap-4 mt-4">
+            <button type="submit" className={styles.button}>
+              Entrar
+            </button>
+
+            <button
+              type="button"
+              onClick={limparCampos}
+              className={styles.button}
+            >
+              Limpar
+            </button>
+          </div>
 
         </form>
 
-           <div className="mt-8 text-center"> 
+        <div className="mt-8 text-center">
           <p>
-            <span>Não tem uma conta?</span> 
+            <span>Não tem uma conta?</span>
             <Link to="/register" className="text-blue-600 hover:underline"> Clique aqui para fazer cadastro</Link>
           </p>
         </div>

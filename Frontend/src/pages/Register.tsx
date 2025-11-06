@@ -10,7 +10,7 @@ const Register: React.FC = () => {
   const [nome, setNome] = useState('');
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
-  const [perfil, setPerfil] = useState<'ADMIN' | 'PACIENTE' | 'CUIDADOR'>('PACIENTE');
+  const [perfil, setPerfil] = useState<'PACIENTE' | 'CUIDADOR'>('PACIENTE');
   const [telefone, setTelefone] = useState<string>('');
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
@@ -18,10 +18,10 @@ const Register: React.FC = () => {
   const handleTelefoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     let value = e.target.value;
 
-    
+
     value = value.replace(/\D/g, '');
 
-    
+
     if (value.length <= 10) {
       value = value.replace(/^(\d{2})(\d{0,5})(\d{0,4})$/, '($1) $2-$3');
     } else {
@@ -38,11 +38,20 @@ const Register: React.FC = () => {
     setLoading(false);
     if (res.ok) {
       setMessage('Usuário cadastrado com sucesso.');
-      setNome(''); setEmail(''); setSenha(''); setPerfil('PACIENTE'); setTelefone('');
+      limparCampos();
       navigate('/dashboard');
     } else {
       setMessage(res.message || 'Erro ao cadastrar.');
     }
+  };
+
+  const limparCampos = () => {
+    setNome('');
+    setEmail('');
+    setSenha('');
+    setPerfil('PACIENTE');
+    setTelefone('');
+    setMessage(null);
   };
 
   return (
@@ -64,20 +73,29 @@ const Register: React.FC = () => {
         <input type="text" className={styles.input} value={telefone} onChange={handleTelefoneChange} required />
 
         <label className={styles.label}>Perfil</label>
-        <select 
-          className={`${styles.input} mb-4`}  
-          value={perfil} 
+        <select
+          className={`${styles.input} mb-4`}
+          value={perfil}
           onChange={(e) => setPerfil(e.target.value as 'PACIENTE' | 'CUIDADOR')}
         >
           <option value="PACIENTE">Paciente</option>
           <option value="CUIDADOR">Cuidador</option>
         </select>
-        
-        <button className="bg-green-600 text-white font-semibold py-2 px-4 rounded-lg" type="submit" disabled={loading}>
-          {loading ? 'Cadastrando...' : 'Cadastrar'}
-        </button>
 
-        {/* Link para login dentro do formulário */}
+        <div className="flex justify-between gap-4 mt-4">
+          <button className={`${styles.button} w-1/2`} type="submit" disabled={loading}>
+            {loading ? 'Cadastrando...' : 'Cadastrar'}
+          </button>
+
+          <button
+            type="button"
+            onClick={limparCampos}
+            className={`${styles.button} w-1/2`}>
+            Limpar
+          </button>
+        </div>
+
+
         <div className="mt-4 text-center">
           <p>
             <span>Já tem uma conta?</span>
