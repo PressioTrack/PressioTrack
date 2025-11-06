@@ -23,8 +23,8 @@ const App = (): ReactElement => {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<LandingPageWrapper />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
+          <Route path="/login" element={<><Navbar /> <Login /> </>} />
+          <Route path="/register" element={<> <Navbar /><Register /> </>} />
           <Route
             path="/dashboard"
             element={

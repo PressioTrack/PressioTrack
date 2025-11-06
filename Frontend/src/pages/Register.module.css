@@ -1,55 +1,69 @@
-/* src/pages/Register.module.css */
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  --green-600: #2f855a;
   --white: #ffffff;
+  --aqua: #D5FFFF;
+  --blue: #005954;
+  --blue2: #5DC1B9;
 }
 
 .container {
-  @apply min-h-screen flex items-center justify-center bg-white;
-  background: linear-gradient(180deg, #f7fff8 0%, #ffffff 100%);
+  @apply flex justify-center items-center min-h-screen;
+  background: linear-gradient(180deg, #e8fffb 0%, #ffffff 100%);
+  padding-top: 4rem; 
 }
 
 .card {
-  @apply w-full max-w-lg p-6 rounded-lg shadow-md;
+  @apply w-full max-w-md p-8 rounded-2xl shadow-lg text-center;
   background: var(--white);
-  border: 1px solid rgba(47,133,90,0.08);
+  border: 1px solid rgba(0, 179, 179, 0.15);
 }
 
 .title {
-  @apply text-2xl font-semibold mb-4;
-  color: var(--green-600);
+  @apply text-2xl font-semibold mb-6;
+  color: var(--blue);
 }
 
-.label { 
-  @apply block text-sm font-medium mt-3 mb-1; 
+.label {
+  @apply block text-sm font-medium text-gray-700 text-left mb-1;
+  color: black;
 }
 
-.input { 
-  @apply w-full px-3 py-2 border rounded; 
-  border-color: rgba(0,0,0,0.08); 
-}
-
-/* Adicionando margem inferior no select */
 .input {
-  @apply mb-4; /* Isso dá margem inferior em todos os inputs, incluindo o select */
+  @apply w-full px-3 py-2 border rounded-lg mb-4 transition-all;
+  border-color: black;
 }
 
-.button { 
-  @apply w-full mt-5 py-2 rounded text-white; 
-  background: var(--green-600); 
-  border: none; 
+.input:focus {
+  @apply ring-2 outline-none;
+  ring-color: var(--blue);
+  border-color: var(--blue);
 }
 
-.message { 
-  @apply text-sm text-green-700 mb-2; 
+.button {
+  @apply flex-1 py-1.5 px-3 rounded-lg font-semibold transition-all text-sm;
+  background-color: var(--blue) !important; 
+  color: #ffffff !important; 
+  border: 1px solid rgba(0, 0, 0, 0.05);
 }
 
-/* Ajuste para o link dentro do formulário */
-.link-container { 
-  @apply mt-4 text-center; 
+.button:hover {
+  background-color: var(--blue2)!important; 
+  opacity: 0.95;
+}
+
+.message {
+  @apply text-sm mb-3;
+  color: var(--blue);
+}
+
+.link-container {
+  @apply mt-5 text-center;
+}
+
+.link-container a {
+  color: var(--blue);
+  @apply hover:underline;
 }

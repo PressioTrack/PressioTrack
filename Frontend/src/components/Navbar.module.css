@@ -1,39 +1,56 @@
-/* src/components/Navbar.module.css */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Colors: verde e branco (natureza) */
 :root {
-  --green-600: #2f855a; /* escuro */
-  --green-400: #68d391; /* claro */
-  --white: #ffffff;
+  --aqua-bg: #D5FFFF;
+  --text-dark: #005954;
+  --hover-bg: #338B85;
 }
 
 .nav {
-  @apply flex items-center justify-between px-4 py-3 bg-white shadow;
-  background: linear-gradient(90deg, var(--white), var(--white));
+  @apply flex items-center justify-between px-8 py-4 shadow-md;
+  background-color: var(--aqua-bg);
+  position: relative; 
+}
+
+
+.loggedNav {
+  @apply justify-between;
+}
+
+.authNav {
+  @apply justify-center shadow-sm;
+}
+
+.left {
+  @apply flex items-center gap-2;
+}
+
+.center {
+  @apply flex justify-center items-center w-full;
 }
 
 .brand {
-  @apply text-lg font-semibold;
-  color: var(--green-600);
+  @apply text-2xl font-semibold flex items-center gap-2;
+  color: var(--text-dark);
   text-decoration: none;
 }
 
-.left { @apply flex items-center; }
-.right { @apply flex items-center gap-3; }
-
-.link {
-  @apply px-3 py-1 rounded hover:underline;
-  color: var(--green-600);
-  text-decoration: none;
+.right {
+  @apply flex items-center;
 }
 
 .button {
-  @apply px-3 py-1 rounded border;
-  border-color: var(--green-600);
-  color: var(--green-600);
+  @apply text-base font-semibold transition-colors px-4 py-2 rounded-lg;
+  color: var(--text-dark);
   background: transparent;
+  border: none;
   cursor: pointer;
+  font-size: 20px;
+}
+
+.button:hover {
+  background-color: var(--hover-bg);
+  color: white;
 }
