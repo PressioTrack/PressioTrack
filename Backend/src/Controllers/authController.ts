@@ -6,9 +6,8 @@ import { AuthRequest, authorizePaciente, authenticateToken } from "../middleware
 
 const prisma = new PrismaClient();
 const JWT_SECRET = process.env.JWT_SECRET!;
-const JWT_EXPIRATION_MS = 24 * 60 * 60 * 1000; //24 horas
+const JWT_EXPIRATION_MS = 24 * 60 * 60 * 1000; 
 
-//registrar usuário
 export const register = async (req: Request, res: Response) => {
     const { nome, email, senha, perfil, telefone } = req.body;
 
@@ -68,7 +67,6 @@ export const register = async (req: Request, res: Response) => {
     }
 };
 
-//login
 export const login = async (req: Request, res: Response) => {
     const { email, senha } = req.body;
     if (!email || !senha) {
@@ -116,7 +114,6 @@ export const login = async (req: Request, res: Response) => {
     }
 };
 
-//logout
 export const logout = async (req: Request, res: Response) => {
     res.clearCookie("jwt");
     return res.status(200).json({ message: "Logout com sucesso" });

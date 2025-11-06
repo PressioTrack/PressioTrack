@@ -5,16 +5,12 @@ import { authenticateToken, AuthRequest, authorizePaciente } from "../middleware
 
 const router = Router();
 
-//rota para registrar usuário
 router.post("/register", register);
 
-//rota de login
 router.post("/login", login);
 
-//rota de logout
 router.post("/logout", logout);
 
-//rota para validar token e retornar informações do usuário
 router.get("/me", authenticateToken, (req: AuthRequest, res: Response) => {
     return res.status(200).json({
         message: "Usuário autenticado com sucesso.",

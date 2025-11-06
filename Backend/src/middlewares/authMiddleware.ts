@@ -6,7 +6,7 @@ export interface AuthRequest extends Request {
     user?: {
         id: number;
         email: string;
-        perfil: 'ADMIN' | 'PACIENTE' | 'CUIDADOR';
+        perfil: 'PACIENTE' | 'CUIDADOR';
     };
 }
 
@@ -24,7 +24,7 @@ export const authenticateToken = (
         const decoded = jwt.verify(token, JWT_SECRET) as {
             id: number;
             email: string;
-            perfil: 'ADMIN' | 'PACIENTE' | 'CUIDADOR';
+            perfil: 'PACIENTE' | 'CUIDADOR';
         };
 
         req.user = decoded;
@@ -35,16 +35,6 @@ export const authenticateToken = (
         res.clearCookie('jwt');
         return res.status(403).json({ message: 'Sessão inválida ou expirada. Faça login novamente.' });
     }
-};
-
-export const authorizeAdmin = (
-    req: AuthRequest,
-    res: Response,
-    next: NextFunction) => {
-    if (!req.user || req.user.perfil !== 'ADMIN') {
-        return res.status(403).json({ message: 'Proibido. Apenas administradores podem realizar esta ação.' });
-    }
-    next();
 };
 
 export const authorizeCuidador = (
