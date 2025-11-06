@@ -29,9 +29,10 @@ model Medicao{
   sistolica Int
   diastolica Int
   status String     
-  dataMedicao DateTime @default(now())
+  dataMedicao DateTime   @default(now())
   @@map("medicoes")
 }
+
 
 enum Perfil{
   ADMIN
