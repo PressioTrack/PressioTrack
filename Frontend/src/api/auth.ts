@@ -20,6 +20,7 @@ export const Register = async (userData: {
   senha: string;
   perfil?: string;
   telefone: string;
+  idade: number;
 }) => {
   const res = await api.post("/register", userData);
   return res.data;

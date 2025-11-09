@@ -2,20 +2,161 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --white: #ffffff;
+  --aqua: #d5ffff;
+  --blue: #005954;
+  --blue2: #5dc1b9;
+  --yellow: #ffc222;
+  --grey: #EAEAEA;
+  --grey2: #d1d5db; 
+  --red: #FF0000;
+  --red2: #cc0000;
+}
+
 .container {
-    @apply min-h-screen p-6 bg-green-50;
-    padding-top: 5rem; 
+  @apply grid grid-cols-1 md:grid-cols-[1fr_360px] gap-6 bg-gradient-to-b from-green-50 to-white min-h-screen px-8 py-10;
 }
 
-.card {
-    @apply p-6 bg-white rounded shadow;
-    border: 1px solid rgba(0, 0, 0, 0.04);
+.cardEsquerda {
+  @apply bg-white p-8 rounded-2xl shadow-xl flex flex-col gap-6;
 }
 
-.title {
-    @apply text-2xl font-semibold text-green-600;
+.statusAtual {
+  @apply bg-gradient-to-r from-teal-50 to-green-50 border border-teal-100 rounded-xl p-5 text-center;
 }
 
-.subtitle {
-    @apply text-sm text-gray-600;
+.pressaoAtual {
+  @apply text-4xl font-bold text-[var(--blue)];
+}
+
+.status {
+  @apply text-xs font-bold px-2 py-1 rounded-md inline-block mt-2;
+}
+
+.statusNormal {
+  @apply bg-green-100 text-green-700;
+}
+
+.statusAlta {
+  @apply bg-red-100 text-red-700;
+}
+
+.statusBaixa {
+  @apply bg-yellow-100 text-yellow-700;
+}
+
+.ultimaMedicao {
+  @apply text-gray-600 text-sm mt-2;
+}
+
+.form {
+  @apply flex flex-col gap-3;
+}
+
+.sectionTitle {
+  @apply font-bold text-[var(--blue)] mb-2;
+}
+
+.inputsRow {
+  @apply grid grid-cols-1 md:grid-cols-2 gap-4;
+}
+
+.input,
+.textarea {
+  @apply border border-gray-300 rounded-lg px-4 py-3 text-gray-800 focus:outline-none focus:ring-2 focus:ring-teal-400 w-full transition;
+}
+
+.linhaBotoes {
+  @apply flex flex-col md:flex-row justify-between gap-3 mt-3;
+}
+
+.button {
+  @apply flex-1 py-1.5 px-3 rounded-lg font-semibold transition-all text-sm;
+  background-color: var(--blue) !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.button:hover {
+  background-color: var(--blue2) !important;
+  opacity: 0.95;
+}
+
+.botaoLimpar {
+  @apply flex-1 py-1.5 px-3 rounded-lg font-semibold transition-all text-sm text-center;
+  background-color: var(--grey) !important;
+  color: #333333 !important;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.botaoLimpar:hover {
+  background-color: var(--grey2) !important;
+  transform: translateY(-1px);
+  opacity: 0.95;
+}
+
+.botaoCancelar {
+  @apply flex-1 py-1.5 px-3 rounded-lg font-semibold transition-all text-sm text-center;
+  background-color: var(--red) !important;
+  color: var(--white) !important;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.botaoCancelar:hover {
+  background-color: var(--red2) !important;
+  opacity: 0.95;
+  transform: translateY(-1px);
+}
+
+.cardDireita {
+  @apply bg-white p-6 rounded-2xl shadow-lg flex flex-col;
+}
+
+.listaMedicoes {
+  @apply space-y-3 overflow-y-auto max-h-[500px] pr-2;
+}
+
+.noMedicoes {
+  @apply text-gray-500 text-sm text-center;
+}
+
+.medicaoCard {
+  @apply border border-gray-100 rounded-xl p-4 bg-white hover:bg-[var(--grey)] transition shadow-sm flex flex-col gap-2;
+}
+
+.medicaoValor {
+  @apply text-lg font-semibold text-[var(--blue)] flex items-center gap-2;
+}
+
+.data {
+  @apply text-xs text-gray-500;
+}
+
+.observacao {
+  @apply text-xs italic text-gray-600 mt-1;
+}
+
+.buttons {
+  @apply flex gap-3 mt-2;
+}
+
+.editButton {
+  @apply text-[var(--blue2)] text-sm font-semibold hover:underline;
+}
+
+.deleteButton {
+  @apply text-red-600 text-sm font-semibold hover:underline;
+}
+
+.message {
+  @apply p-3 rounded-lg font-medium text-sm text-center border;
+}
+
+.success {
+  @apply bg-green-100 text-green-800 border-green-300 border-2;
+}
+
+.error {
+  @apply bg-red-100 text-red-800 border-red-300 border-2;
 }

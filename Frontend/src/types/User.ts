@@ -6,4 +6,5 @@ export interface User {
   email: string;
   perfil: UserProfile;
   telefone: string;
+  idade: number;
 }

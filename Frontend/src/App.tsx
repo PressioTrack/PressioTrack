@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
@@ -22,17 +22,22 @@ const App = (): ReactElement => {
     <AuthProvider>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<LandingPageWrapper />} />
-          <Route path="/login" element={<><Navbar /> <Login /> </>} />
-          <Route path="/register" element={<> <Navbar /><Register /> </>} />
+          <Route path="/" element={<LandingPage />} />
+
+          <Route path="/login" element={<PageWithNavbar><Login /></PageWithNavbar>} />
+          <Route path="/register" element={<PageWithNavbar><Register /></PageWithNavbar>} />
+
           <Route
             path="/dashboard"
             element={
               <ProtectedRoute>
-                <Dashboard />
+                <PageWithNavbar>
+                  <Dashboard />
+                </PageWithNavbar>
               </ProtectedRoute>
             }
           />
+
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </BrowserRouter>
@@ -40,16 +45,13 @@ const App = (): ReactElement => {
   );
 };
 
-const LandingPageWrapper = () => {
-  const location = useLocation();
 
-  return (
-    <>
-      {}
-      {location.pathname !== '/' && <Navbar />}
-      <LandingPage />
-    </>
-  );
-};
+const PageWithNavbar = ({ children }: { children: React.ReactNode }) => (
+  <>
+    <Navbar />
+    {children}
+  </>
+);
+
 
 export default App;

@@ -6,10 +6,10 @@ const prisma = new PrismaClient();
 
 export const inserirMedicao = async (req: AuthRequest, res: Response) => {
   try {
-    const { sistolica, diastolica, status } = req.body;
+    const { sistolica, diastolica, status, observacao } = req.body;
     const usuarioId = Number(req.user?.id);
 
-        if (!sistolica || !diastolica || !status || isNaN(usuarioId) || usuarioId <= 0) {
+        if (!sistolica || !diastolica || !status || !observacao || isNaN(usuarioId) || usuarioId <= 0) {
       return res.status(400).json({ message: "Todos os campos são obrigatórios." });
     }
 
@@ -18,6 +18,7 @@ export const inserirMedicao = async (req: AuthRequest, res: Response) => {
         sistolica: Number(sistolica),
         diastolica: Number(diastolica),
         status,
+        observacao,
         usuarioId,
       },
     });
@@ -102,13 +103,13 @@ export const deletarMedicao = async (req: AuthRequest, res: Response) => {
 export const atualizarMedicao = async (req: AuthRequest, res: Response) => {
   const medicaoId = Number(req.params.id);
   const usuarioId = req.user!.id;
-  const { sistolica, diastolica, status } = req.body;
+  const { sistolica, diastolica, observacao, status } = req.body;
 
   if (isNaN(medicaoId)) {
     return res.status(400).json({ message: "ID inválido." });
   }
 
-  if (!sistolica || !diastolica || !status) {
+  if (!sistolica || !diastolica || !status || !observacao) {
     return res.status(400).json({ message: "Todos os campos são obrigatórios." });
   }
 
@@ -126,6 +127,7 @@ export const atualizarMedicao = async (req: AuthRequest, res: Response) => {
       data: {
         sistolica: Number(sistolica),
         diastolica: Number(diastolica),
+        observacao,
         status,
       },
     });
