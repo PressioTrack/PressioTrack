@@ -7,10 +7,10 @@ type AuthContextType = {
   loading: boolean;
   login: (email: string, senha: string) => Promise<{ ok: boolean; message?: string }>;
   logout: () => Promise<void>;
-  Register: (payload: { nome: string; email: string; senha: string; perfil: string, telefone: string }) => Promise<{ ok: boolean; message?: string }>;
+  Register: (payload: { nome: string; email: string; senha: string; perfil: string, telefone: string, idade: number }) => Promise<{ ok: boolean; message?: string }>;
   refreshUser: () => Promise<void>;
 };
-
+  
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
@@ -72,6 +72,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   senha: string;
   perfil: string;
   telefone: string;
+  idade: number;
 }) => {
   try {
     const body = {
@@ -80,6 +81,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       senha: payload.senha,
       perfil: payload.perfil,
       telefone: payload.telefone,
+      idade: payload.idade,
     };
 
     const data = await Register(body);

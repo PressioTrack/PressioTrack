@@ -42,15 +42,13 @@
 }
 
 .button {
-  @apply text-base font-semibold transition-colors px-4 py-2 rounded-lg;
-  color: var(--text-dark);
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  font-size: 20px;
+  @apply flex-1 py-1.5 px-3 rounded-lg font-semibold transition-all text-sm;
+  background-color: var(--blue) !important; 
+  color: #ffffff !important; 
+  border: 1px solid rgba(0, 0, 0, 0.05);
 }
 
 .button:hover {
-  background-color: var(--hover-bg);
-  color: white;
+  background-color: var(--blue2)!important; 
+  opacity: 0.95;
 }

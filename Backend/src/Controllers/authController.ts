@@ -9,9 +9,10 @@ const JWT_SECRET = process.env.JWT_SECRET!;
 const JWT_EXPIRATION_MS = 24 * 60 * 60 * 1000; 
 
 export const register = async (req: Request, res: Response) => {
-    const { nome, email, senha, perfil, telefone } = req.body;
+    const { nome, email, senha, perfil, telefone, idade } = req.body;
 
-    if (!nome || !email || !senha || !perfil) {
+    const idadeNumber = Number(idade);
+    if (!nome || !email || !senha || !perfil || !telefone ||  isNaN(idadeNumber)) {
         return res.status(400).json({ message: "Todos os campos são obrigatórios e a senha deve conter no minímo 6 caracteres" })
     }
     if (senha.length < 6) {
@@ -29,8 +30,9 @@ export const register = async (req: Request, res: Response) => {
                 senha: hashedPassword,
                 perfil,
                 telefone,
+                idade: Number(idade),
             },
-            select: { id: true, email: true, nome: true, perfil: true, telefone: true, cuidadorId: true, criadoEm: true }
+            select: { id: true, email: true, nome: true, perfil: true, telefone: true, idade:true, cuidadorId: true, criadoEm: true }
         });
         
         const tokenPayload = {
@@ -54,6 +56,7 @@ export const register = async (req: Request, res: Response) => {
                 email: novoUsuario.email,
                 perfil: novoUsuario.perfil,
                 telefone: novoUsuario.telefone,
+                idade: novoUsuario.idade,
                 cuidadorId: novoUsuario.cuidadorId,
             },
             token: token,
@@ -103,6 +106,7 @@ export const login = async (req: Request, res: Response) => {
                 email: usuario.email,
                 perfil: usuario.perfil,
                 telefone: usuario.telefone,
+                idade: usuario.idade,
                 cuidadorId: usuario.cuidadorId,
             },
             token: token,

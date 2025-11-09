@@ -12,6 +12,7 @@ const Register: React.FC = () => {
   const [senha, setSenha] = useState('');
   const [perfil, setPerfil] = useState<'PACIENTE' | 'CUIDADOR'>('PACIENTE');
   const [telefone, setTelefone] = useState<string>('');
+  const [idade, setIdade] = useState<string>("");
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
 
@@ -34,7 +35,7 @@ const Register: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    const res = await Register({ nome, email, senha, perfil, telefone });
+    const res = await Register({ nome, email, senha, perfil, telefone, idade: Number(idade) });
     setLoading(false);
     if (res.ok) {
       setMessage('Usuário cadastrado com sucesso.');
@@ -51,6 +52,7 @@ const Register: React.FC = () => {
     setSenha('');
     setPerfil('PACIENTE');
     setTelefone('');
+    setIdade('');
     setMessage(null);
   };
 
@@ -71,6 +73,9 @@ const Register: React.FC = () => {
 
         <label className={styles.label}>Telefone</label>
         <input type="text" className={styles.input} value={telefone} onChange={handleTelefoneChange} required />
+
+        <label className={styles.label}>Idade</label>
+        <input type="number" className={styles.input} value={idade} onChange={(e) => setIdade(e.target.value)} required /> 
 
         <label className={styles.label}>Perfil</label>
         <select
