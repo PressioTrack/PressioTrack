@@ -20,6 +20,8 @@ model Usuario{
   pacientes Usuario[] @relation("Cuidadores")
   dadosSaude DadosSaude?
   medicoes Medicao[]
+  resetToken String?    
+  resetTokenExpiry DateTime?
   criadoEm DateTime @default(now())
   @@map("usuarios")
 }
@@ -42,10 +44,6 @@ model DadosSaude {
   usuarioId Int @unique
   pressaoSistolicaNormal Int? @default(120)
   pressaoDiastolicaNormal Int? @default(80)
-  sistolicaMin Int?
-  sistolicaMax Int?
-  diastolicaMin Int?
-  diastolicaMax Int?
   dataDefinicao DateTime @default(now())
   @@map("dados_saude")
 }

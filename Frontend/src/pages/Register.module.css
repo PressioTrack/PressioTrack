@@ -4,15 +4,12 @@
 
 :root {
   --white: #ffffff;
-  --aqua: #D5FFFF;
   --blue: #005954;
   --blue2: #5DC1B9;
 }
 
 .container {
-  @apply flex justify-center items-center min-h-screen;
-  background: linear-gradient(180deg, #e8fffb 0%, #ffffff 100%);
-  padding-top: 4rem; 
+  @apply flex justify-center items-center min-h-screen; 
 }
 
 .card {
@@ -20,6 +17,8 @@
   background: var(--white);
   border: 1px solid rgba(0, 179, 179, 0.15);
 }
+
+
 
 .title {
   @apply text-2xl font-semibold mb-6;
@@ -66,4 +65,16 @@
 .link-container a {
   color: var(--blue);
   @apply hover:underline;
+}
+
+.link{
+  @apply text-blue-600 hover:underline;
+}
+
+.senhaContainer {
+  @apply relative w-full;
+}
+
+.olho {
+  @apply absolute right-3 top-[55%] -translate-y-1/2 cursor-pointer text-gray-500 hover:text-gray-700;
 }

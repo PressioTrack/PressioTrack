@@ -4,10 +4,8 @@
 
 :root {
   --white: #ffffff;
-  --aqua: #d5ffff;
   --blue: #005954;
   --blue2: #5dc1b9;
-  --yellow: #ffc222;
   --grey: #EAEAEA;
   --grey2: #d1d5db; 
   --red: #FF0000;
@@ -15,7 +13,7 @@
 }
 
 .container {
-  @apply grid grid-cols-1 md:grid-cols-[1fr_360px] gap-6 bg-gradient-to-b from-green-50 to-white min-h-screen px-8 py-10;
+  @apply grid grid-cols-1 md:grid-cols-[1fr_360px] gap-6 from-green-50 to-white min-h-screen px-8 py-10;
 }
 
 .cardEsquerda {
@@ -111,11 +109,14 @@
 
 .cardDireita {
   @apply bg-white p-6 rounded-2xl shadow-lg flex flex-col;
+  height: 1000px; 
 }
 
 .listaMedicoes {
-  @apply space-y-3 overflow-y-auto max-h-[500px] pr-2;
+  @apply overflow-y-auto space-y-3 pr-2 flex-1;
+  max-height: 100%; 
 }
+
 
 .noMedicoes {
   @apply text-gray-500 text-sm text-center;
@@ -159,4 +160,11 @@
 
 .error {
   @apply bg-red-100 text-red-800 border-red-300 border-2;
+}
+
+.exportarPDF .button {
+  @apply w-full max-w-md bg-green-500 text-white py-3 rounded-md cursor-pointer text-base transition-colors;
+}
+.exportarPDF {
+  @apply mt-4 flex-none; 
 }

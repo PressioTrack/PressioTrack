@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate, Link } from 'react-router-dom';
 import styles from './Register.module.css';
+import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
 
 const Register: React.FC = () => {
   const { user, Register } = useAuth();
@@ -15,20 +16,18 @@ const Register: React.FC = () => {
   const [idade, setIdade] = useState<string>("");
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
+  const [showSenha, setShowSenha] = useState(false);
 
   const handleTelefoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     let value = e.target.value;
 
-
     value = value.replace(/\D/g, '');
-
 
     if (value.length <= 10) {
       value = value.replace(/^(\d{2})(\d{0,5})(\d{0,4})$/, '($1) $2-$3');
     } else {
       value = value.replace(/^(\d{2})(\d{5})(\d{0,4})$/, '($1) $2-$3');
     }
-
     setTelefone(value);
   };
 
@@ -40,7 +39,7 @@ const Register: React.FC = () => {
     if (res.ok) {
       setMessage('Usuário cadastrado com sucesso.');
       limparCampos();
-      navigate('/dashboard');
+      navigate('/perfil');
     } else {
       setMessage(res.message || 'Erro ao cadastrar.');
     }
@@ -62,22 +61,29 @@ const Register: React.FC = () => {
         <h2 className={styles.title}>Cadastrar Usuário</h2>
         {message && <div className={styles.message}>{message}</div>}
 
-        <label className={styles.label}>Nome</label>
+        <label className={styles.label}>Nome: </label>
         <input className={styles.input} value={nome} onChange={(e) => setNome(e.target.value)} required />
 
-        <label className={styles.label}>Email</label>
+        <label className={styles.label}>Email: </label>
         <input type="email" className={styles.input} value={email} onChange={(e) => setEmail(e.target.value)} required />
 
-        <label className={styles.label}>Senha</label>
-        <input type="password" className={styles.input} value={senha} onChange={(e) => setSenha(e.target.value)} minLength={6} required />
 
-        <label className={styles.label}>Telefone</label>
+        <div className={styles.senhaContainer}>
+          <label className={styles.label}>Senha: </label>
+          <input type={showSenha ? 'text' : 'password'} className={styles.input} value={senha} onChange={(e) => setSenha(e.target.value)} minLength={6} required />
+
+          <span
+            className={styles.olho} onClick={() => setShowSenha(!showSenha)}>
+            {showSenha ? <AiOutlineEyeInvisible /> : <AiOutlineEye />}
+          </span>
+        </div>
+        <label className={styles.label}>Telefone: </label>
         <input type="text" className={styles.input} value={telefone} onChange={handleTelefoneChange} required />
 
-        <label className={styles.label}>Idade</label>
-        <input type="number" className={styles.input} value={idade} onChange={(e) => setIdade(e.target.value)} required /> 
+        <label className={styles.label}>Idade: </label>
+        <input type="number" className={styles.input} value={idade} onChange={(e) => setIdade(e.target.value)} required />
 
-        <label className={styles.label}>Perfil</label>
+        <label className={styles.label}>Perfil: </label>
         <select
           className={`${styles.input} mb-4`}
           value={perfil}
@@ -88,14 +94,11 @@ const Register: React.FC = () => {
         </select>
 
         <div className="flex justify-between gap-4 mt-4">
-          <button className={`${styles.button} w-1/2`} type="submit" disabled={loading}>
+          <button className={`${styles.button}`} type="submit" disabled={loading}>
             {loading ? 'Cadastrando...' : 'Cadastrar'}
           </button>
 
-          <button
-            type="button"
-            onClick={limparCampos}
-            className={`${styles.button} w-1/2`}>
+          <button className={`${styles.button}`} type="button" onClick={limparCampos}>
             Limpar
           </button>
         </div>
@@ -104,7 +107,7 @@ const Register: React.FC = () => {
         <div className="mt-4 text-center">
           <p>
             <span>Já tem uma conta?</span>
-            <Link to="/login" className="text-blue-600 hover:underline"> Clique aqui para fazer login</Link>
+            <Link to="/login" className={styles.link}> Clique aqui para fazer login</Link>
           </p>
         </div>
       </form>

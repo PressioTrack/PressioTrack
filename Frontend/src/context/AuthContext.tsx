@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import type { User } from "../types/User";
-import { login, logout, getProfile, Register } from '../api/auth';
+import { login, logout, getPerfil, Register, forgot, reset } from '../api/auth';
 
 type AuthContextType = {
   user: User | null;
@@ -9,6 +9,8 @@ type AuthContextType = {
   logout: () => Promise<void>;
   Register: (payload: { nome: string; email: string; senha: string; perfil: string, telefone: string, idade: number }) => Promise<{ ok: boolean; message?: string }>;
   refreshUser: () => Promise<void>;
+  forgotPassword: (email: string) => Promise<{ ok: boolean; message?: string }>;
+  resetPassword: (token: string, senha: string) => Promise<{ ok: boolean; message?: string }>;
 };
   
 
@@ -26,7 +28,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const refreshUser = async () => {
     try {
-      const data = await getProfile();
+      const data = await getPerfil();
       if (data?.usuario) {
         setUser(data.usuario as User);
       } else {
@@ -97,6 +99,27 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }
 };
 
+const forgotPassword = async (email: string) => {
+  try {
+      const data = await forgot(email);
+      return { ok: true, message: data?.message || 'Instruções enviadas.' };
+      
+  } catch (err: any) {
+      const message = err?.response?.data?.message || 'Erro ao solicitar redefinição.';
+      return { ok: false, message };
+  }
+};
+const resetPassword = async (token: string, senha: string) => {
+  try {
+      const data = await reset(token, senha); 
+      return { ok: true, message: data?.message || 'Senha redefinida com sucesso.' };
+  } catch (err: any) {
+      const message = 
+          err?.response?.data?.message || err?.response?.data?.error || 'Link inválido ou expirado.';
+      return { ok: false, message };
+  }
+}
+
 
   return (
     <AuthContext.Provider
@@ -107,6 +130,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         logout: logoutUser,
         Register: RegisterFn,
         refreshUser,
+        forgotPassword,
+        resetPassword,
       }}
     >
       {children}
