@@ -2,24 +2,57 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --white: #ffffff;
+  --blue: #005954;
+  --blue2: #5dc1b9;
+}
 .container {
-  @apply min-h-screen px-6 py-8 bg-gradient-to-b from-green-50 to-white;
+  @apply min-h-screen px-6 py-8 from-green-50 to-white;
+}
+
+.logo {
+  @apply w-40 md:w-64 h-auto;
 }
 
 .cabecalho {
-  @apply flex justify-between items-center mb-10;
+  @apply flex justify-between items-start mb-10;
 }
 
 .marca {
   @apply flex items-center;
 }
 
-.logo {
-  @apply w-64 h-auto;
+.navContainer {
+  @apply flex flex-col justify-start items-end;
+}
+
+.navLinks {
+  @apply flex gap-6 mb-2 mt-3; 
+}
+
+.navLinks a {
+  @apply text-gray-600 font-medium hover:text-teal-700;
+}
+
+.loggedButtons {
+  @apply flex flex-wrap justify-end items-center gap-3 mt-2;
+}
+
+.button {
+  @apply py-2 px-4 rounded-lg font-semibold text-sm transition-all;
+  background-color: var(--blue);
+  color: var(--white);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.button:hover {
+  @apply opacity-95;
+  background-color: var(--blue2);
 }
 
 .hero {
-  @apply grid grid-cols-1 md:grid-cols-[1fr_430px] gap-9 items-center bg-white rounded-xl shadow-lg p-12 mb-12;
+  @apply grid grid-cols-1 md:grid-cols-[1fr_430px] gap-9 items-center bg-white rounded-xl shadow-lg p-8 md:p-12 mb-12;
 }
 
 .etiqueta {
@@ -88,8 +121,4 @@
 
 .rodape {
   @apply text-center text-gray-500 text-xs mt-6;
-}
-
-nav a {
-  @apply text-gray-600 font-medium ml-6 hover:text-teal-700;
 }

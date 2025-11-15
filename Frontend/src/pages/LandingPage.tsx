@@ -1,9 +1,26 @@
 import React from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 import styles from './LandingPage.module.css';
 
 const LandingPage: React.FC = () => {
+  const { user, logout } = useAuth();
   const navigate = useNavigate();
+
+  const isAuthPage = location.pathname === '/login' || location.pathname === '/register';
+
+  const handleLogout = async () => {
+    await logout();
+    navigate('/');
+  };
+
+  const handleDashboard = () => {
+    navigate('/dashboard');
+  };
+
+  const handlePerfil = () => {
+    navigate("/perfil");
+  };
 
   return (
     <div className={styles.container}>
@@ -17,9 +34,26 @@ const LandingPage: React.FC = () => {
             />
           </Link>
         </div>
-        <nav>
-          <a href="#beneficios">Benefícios</a>
-          <a href="#como-funciona">Como funciona</a>
+        <nav className={styles.navContainer}>
+
+          <div className={styles.navLinks}>
+            <a href="#beneficios">Benefícios</a>
+            <a href="#como-funciona">Como funciona</a>
+          </div>
+
+          {!isAuthPage && user && (
+            <div className={styles.loggedButtons}>
+              <button className={styles.button} onClick={handleDashboard}>
+                DASHBOARD
+              </button>
+              <button className={styles.button} onClick={handlePerfil}>
+                PERFIL
+              </button>
+              <button className={styles.button} onClick={handleLogout}>
+                SAIR
+              </button>
+            </div>
+          )}
         </nav>
       </header>
 

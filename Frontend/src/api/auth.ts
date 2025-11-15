@@ -9,8 +9,8 @@ export const logout = async () => {
   await api.post("/logout");
 };
 
-export const getProfile = async () => {
-  const res = await api.get("/me");
+export const getPerfil = async () => {
+  const res = await api.get("/perfil");
   return res.data;
 };
 
@@ -25,3 +25,13 @@ export const Register = async (userData: {
   const res = await api.post("/register", userData);
   return res.data;
 };
+
+export const forgot = async (email:string)=>{
+  const res = await api.post("/forgot", { email });
+  return res.data;
+};
+export const reset = async (token:string,senha:string)=>{
+  const res = await api.post("/reset", {token, novaSenha: senha });
+  return res.data;
+};
+

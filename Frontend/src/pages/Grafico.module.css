@@ -1,0 +1,24 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --primary-color: #005954;
+  --sistolic-color: #ff0000;
+  --diastolic-color: #005954;
+  --bg-card: #ffffff;
+}
+
+.container {
+  @apply w-full h-[500px] rounded-xl shadow-md p-4 mt-4 bg-white;
+  background-color: var(--bg-card);
+}
+
+.title {
+  @apply font-bold mb-4;
+  color: var(--primary-color);
+}
+
+.legend {
+  @apply mb-2;
+}

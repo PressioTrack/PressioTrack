@@ -8,11 +8,19 @@ const Navbar: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const isAuthPage = location.pathname === '/login' || location.pathname === '/register';
+  const isAuthPage = location.pathname === '/login' || location.pathname === '/register' || location.pathname === '/forgot' || location.pathname === '/reset';
 
   const handleLogout = async () => {
     await logout();
     navigate('/login');
+  };
+
+  const handlePerfil = () => {
+    navigate("/perfil");
+  };
+
+  const handleDashboard = () => {
+    navigate("/dashboard");
   };
 
   return (
@@ -25,6 +33,12 @@ const Navbar: React.FC = () => {
 
       {!isAuthPage && (
         <div className={styles.right}>
+           <button className={styles.button} onClick={handleDashboard}>
+            DASHBOARD
+          </button>
+          <button className={styles.button} onClick={handlePerfil}>
+            PERFIL
+          </button>
           <button className={styles.button} onClick={handleLogout}>
             SAIR
           </button>

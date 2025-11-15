@@ -1,0 +1,63 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --white: #ffffff;
+  --blue: #005954;
+  --blue2: #5DC1B9;
+}
+
+.container {
+  @apply max-w-md mx-auto mt-10 bg-white shadow-lg rounded-2xl p-6 flex flex-col gap-4;
+}
+
+.title {
+  @apply text-2xl font-bold text-center text-[var(--blue)];
+}
+
+.form {
+  @apply flex flex-col gap-3;
+}
+
+label {
+  @apply flex flex-col text-sm font-semibold text-gray-700;
+  gap: 0.25rem;
+}
+
+.input {
+  @apply border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-teal-400 focus:outline-none;
+}
+
+.buttons {
+  @apply flex justify-between gap-4 mt-4;
+}
+
+.button {
+  @apply flex-1 py-1.5 px-3 rounded-lg font-semibold transition-all text-sm;
+  background-color: var(--blue) !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.button:hover {
+  background-color: var(--blue2) !important;
+  opacity: 0.95;
+}
+
+.botaoCancelar {
+  @apply flex-1 py-1.5 px-3 rounded-lg font-semibold transition-all text-sm text-center;
+  background-color: var(--red) !important;
+  color: var(--white) !important;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.botaoCancelar:hover {
+  background-color: var(--red2) !important;
+  opacity: 0.95;
+  transform: translateY(-1px);
+}
+
+.message {
+  @apply text-center mt-3 text-sm font-medium;
+}

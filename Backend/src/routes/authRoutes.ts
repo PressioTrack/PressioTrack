@@ -1,5 +1,5 @@
 import { Router, Response } from "express";
-import { login, register, logout } from "../Controllers/authController"
+import { login, register, logout, forgotPassword, resetPassword, } from "../Controllers/authController"
 import { authenticateToken, AuthRequest, authorizePaciente } from "../middlewares/authMiddleware";
 
 
@@ -10,6 +10,10 @@ router.post("/register", register);
 router.post("/login", login);
 
 router.post("/logout", logout);
+
+router.post('/forgot', forgotPassword); 
+
+router.post('/reset', resetPassword);   
 
 router.get("/me", authenticateToken, (req: AuthRequest, res: Response) => {
     return res.status(200).json({
