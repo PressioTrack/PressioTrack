@@ -4,6 +4,8 @@ import { getMedicoes, createMedicao, updateMedicao, deleteMedicao } from "../api
 import { getPerfil } from "../api/userPerfil";
 import { jsPDF } from "jspdf";
 import Grafico from "./Grafico";
+import { svgToPng } from "../utils/svgToPng";
+import logoImg from "/logotipo-menor.png";
 
 type MessageType = "success" | "error" | null;
 
@@ -137,7 +139,7 @@ const Dashboard: React.FC = () => {
     setObservacao(m.observacao || "");
   };
 
-  const exportarPDF = () => {
+  const exportarPDF = async () => {
     if (medicoes.length === 0) {
       displayMessage("Não há medições para exportar.", "error");
       return;
@@ -146,7 +148,6 @@ const Dashboard: React.FC = () => {
     const doc = new jsPDF("p", "mm", "a4");
     const pageWidth = doc.internal.pageSize.getWidth();
 
-    const logoImg = "/logotipo-menor.png";
     const logoWidth = 100;
     const logoHeight = 25;
     const logoX = (pageWidth - logoWidth) / 2;
@@ -185,6 +186,23 @@ const Dashboard: React.FC = () => {
       }
     });
 
+    const svg = document.querySelector(
+      "#grafico-pdf .recharts-wrapper > svg"
+    ) as SVGSVGElement;
+
+
+    if (svg) {
+      const imgData = await svgToPng(svg, 900, 400);
+
+      doc.addPage();
+      doc.setFontSize(16);
+      doc.text("Gráfico - Últimos 7 dias", pageWidth / 2, 15, { align: "center" });
+
+      const pdfWidth = pageWidth - 20;
+      const pdfHeight = (pdfWidth * 400) / 900;
+
+      doc.addImage(imgData, "PNG", 10, 25, pdfWidth, pdfHeight);
+    }
     doc.save("medicoes.pdf");
   };
 
@@ -198,13 +216,12 @@ const Dashboard: React.FC = () => {
                 {ultimaMedicao.sistolica} / {ultimaMedicao.diastolica} mmHg
               </h2>
               <span
-                className={`${styles.status} ${
-                  ultimaMedicao.status === "NORMAL"
-                    ? styles.statusNormal
-                    : ultimaMedicao.status === "HIPERTENSÃO"
+                className={`${styles.status} ${ultimaMedicao.status === "NORMAL"
+                  ? styles.statusNormal
+                  : ultimaMedicao.status === "HIPERTENSÃO"
                     ? styles.statusAlta
                     : styles.statusBaixa
-                }`}
+                  }`}
               >
                 {ultimaMedicao.status}
               </span>
@@ -266,7 +283,7 @@ const Dashboard: React.FC = () => {
           </div>
         </form>
 
-        <Grafico />
+        <Grafico medicoes={medicoes.slice(-7)} />
       </div>
 
       <div className={styles.cardDireita}>
@@ -281,13 +298,12 @@ const Dashboard: React.FC = () => {
                   <p className={styles.medicaoValor}>
                     {m.sistolica}/{m.diastolica} mmHg{" "}
                     <span
-                      className={`${styles.status} ${
-                        m.status === "NORMAL"
-                          ? styles.statusNormal
-                          : m.status === "HIPERTENSÃO"
+                      className={`${styles.status} ${m.status === "NORMAL"
+                        ? styles.statusNormal
+                        : m.status === "HIPERTENSÃO"
                           ? styles.statusAlta
                           : styles.statusBaixa
-                      }`}
+                        }`}
                     >
                       {m.status}
                     </span>

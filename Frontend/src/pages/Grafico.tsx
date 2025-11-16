@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useMemo } from "react";
 import styles from "./Grafico.module.css";
 import { LineChart, Line, XAxis, YAxis, Tooltip, CartesianGrid, ResponsiveContainer, Legend } from "recharts";
-import { getMedicoes } from "../api/medicoes";
 
 type Medicao = {
     sistolica: number;
@@ -9,72 +8,80 @@ type Medicao = {
     dataMedicao: string;
 };
 
-type MessageType = "success" | "error" | null;
+type GraficoProps = {
+    medicoes: Medicao[];
+};
 
-const Grafico: React.FC = () => {
-    const [medicoes, setMedicoes] = useState<Medicao[]>([]);
-    const [message, setMessage] = useState<string | null>(null);
-    const [messageType, setMessageType] = useState<MessageType>(null);
+const Grafico: React.FC<GraficoProps> = ({ medicoes }) => {
 
-    const displayMessage = (text: string, type: MessageType = "error") => {
-        setMessage(text);
-        setMessageType(type);
-        setTimeout(() => {
-            setMessage(null);
-            setMessageType(null);
-        }, 6000);
+    const data = useMemo(() => {
+        return medicoes.map((m) => ({
+            data: new Date(m.dataMedicao).toLocaleTimeString([], {
+                hour: "2-digit",
+                minute: "2-digit",
+            }),
+            sistolica: m.sistolica,
+            diastolica: m.diastolica,
+        }));
+    }, [medicoes]);
+
+    const sistolicas = medicoes.map((m) => Number(m.sistolica));
+    const diastolicas = medicoes.map((m) => Number(m.diastolica));
+
+    const calcularMedia = (valores: number[]): number => {
+        if (valores.length === 0) return 0;
+        const soma = valores.reduce((acc, val) => acc + val, 0);
+        return soma / valores.length;
     };
 
-    const carregarMedicoes = async () => {
-        try {
-            const res = await getMedicoes();
-            setMedicoes(res.slice(-7));
-        } catch (err) {
-            console.error("Erro ao carregar medições:", err);
-            displayMessage("Erro ao carregar medições.", "error");
-        }
+    const calcularDesvioPadrao = (valores: number[]): number => {
+        if (valores.length === 0) return 0;
+        const media = calcularMedia(valores);
+        const somaQuadrados = valores.reduce((acc, val) => acc + Math.pow(val - media, 2), 0);
+        return Math.sqrt(somaQuadrados / valores.length);
     };
 
-    useEffect(() => {
-        carregarMedicoes();
-    }, []);
+    const mediaSist = calcularMedia(sistolicas);
+    const mediaDia = calcularMedia(diastolicas);
 
-    const data = medicoes.map((m) => ({
-        data: new Date(m.dataMedicao).toLocaleTimeString([], {
-            hour: "2-digit",
-            minute: "2-digit",
-        }),
-        sistolica: m.sistolica,
-        diastolica: m.diastolica,
-    }));
+    const desvioSist = calcularDesvioPadrao(sistolicas);
+    const desvioDia = calcularDesvioPadrao(diastolicas);
 
     return (
         <div className={styles.container}>
             <h3 className={styles.title}>Gráfico de Medições (7 dias)</h3>
 
-            {message && (
-                <div className={`${styles.message} ${styles[messageType!]}`}>
-                    {message}
-                </div>
-            )}
+            <div id="grafico-pdf">
+                <ResponsiveContainer width="100%" height={350}>
+                    <LineChart data={data} margin={{ top: 20, right: 30, left: 0, bottom: 40 }}>
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis dataKey="data" tick={{ fontSize: 12 }} interval="preserveStartEnd" />
+                        <YAxis domain={["auto", "auto"]} tick={{ fontSize: 12 }} />
+                        <Tooltip formatter={(value, name) => [`${value}`, name]} labelFormatter={(label) => `Horário: ${label}`} />
+                        <Legend verticalAlign="top" height={40} className={styles.legend} />
+                        <Line type="monotone" dataKey="sistolica" stroke="var(--sistolic-color)" strokeWidth={3} name="Sistólica" dot={{ r: 5 }} />
+                        <Line type="monotone" dataKey="diastolica" stroke="var(--diastolic-color)" strokeWidth={3} name="Diastólica" dot={{ r: 5 }} />
+                    </LineChart>
+                </ResponsiveContainer>
+            </div>
+            <div className={styles.desvioContainer}>
+                <h4 className={styles.desvioTitle}>Desvio Padrão das Medições</h4>
 
-            <ResponsiveContainer width="100%" height="100%">
-                <LineChart data={data} margin={{ top: 20, right: 30, left: 0, bottom: 40 }}>
-                    <CartesianGrid strokeDasharray="3 3" />
+                <p className={styles.desvioItem}>
+                   <strong>Sistólica:</strong> desvio {desvioSist.toFixed(2)} mmHg - média {mediaSist.toFixed(1)}  
+                </p>
 
-                    <XAxis dataKey="data" tick={{ fontSize: 12 }} interval="preserveStartEnd" />
+                <p className={styles.desvioItem}>
+                  <strong>Diastólica:</strong> desvio {desvioDia.toFixed(2)} mmHg - média {mediaDia.toFixed(1)} 
+                </p>
 
-                    <YAxis domain={["auto", "auto"]} tick={{ fontSize: 12 }} />
+                <p className={styles.desvioInfo}>
+                    O desvio padrão indica a variação das medições. Valores menores significam
+                    medições mais consistentes; valores maiores indicam maior variação da pressão.
+                </p>
+            </div>
 
-                    <Tooltip formatter={(value, name) => [`${value}`, name]} labelFormatter={(label) => `Horário: ${label}`} />
 
-                    <Legend verticalAlign="top" height={40} className={styles.legend} />
-
-                    <Line type="monotone" dataKey="sistolica" stroke="var(--sistolic-color)" strokeWidth={3} name="Sistólica" dot={{ r: 5 }} />
-
-                    <Line type="monotone" dataKey="diastolica" stroke="var(--diastolic-color)" strokeWidth={3} name="Diastólica" dot={{ r: 5 }} />
-                </LineChart>
-            </ResponsiveContainer>
         </div>
     );
 };
