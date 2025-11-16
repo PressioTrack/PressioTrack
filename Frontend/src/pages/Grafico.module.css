@@ -7,11 +7,12 @@
   --sistolic-color: #ff0000;
   --diastolic-color: #005954;
   --bg-card: #ffffff;
+  --success-color: #28a745;
+  --error-color: #dc3545;
 }
 
 .container {
-  @apply w-full h-[500px] rounded-xl shadow-md p-4 mt-4 bg-white;
-  background-color: var(--bg-card);
+  @apply w-full rounded-xl shadow-md p-4 mt-4 bg-white;
 }
 
 .title {
@@ -21,4 +22,20 @@
 
 .legend {
   @apply mb-2;
+}
+
+.desvioContainer {
+  @apply mt-6 p-4 bg-gray-50 rounded-lg border border-gray-200;
+}
+
+.desvioTitle {
+  @apply text-lg font-semibold text-gray-800 mb-2;
+}
+
+.desvioItem {
+  @apply text-gray-700 text-sm mb-1;
+}
+
+.desvioInfo {
+  @apply text-sm text-gray-500 leading-snug;
 }
