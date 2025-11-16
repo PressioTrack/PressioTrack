@@ -1,29 +1,60 @@
 import { Response } from 'express';
 import { PrismaClient } from '@prisma/client';
 import { AuthRequest } from '../middlewares/authMiddleware';
+import { sendHypertensionAlertEmail } from '../services/emailService';
 
 const prisma = new PrismaClient();
 
 export const inserirMedicao = async (req: AuthRequest, res: Response) => {
   try {
-    const { sistolica, diastolica, status, observacao } = req.body;
+    const { sistolica, diastolica, observacao } = req.body;
     const usuarioId = Number(req.user?.id);
 
-        if (!sistolica || !diastolica || !status || !observacao || isNaN(usuarioId) || usuarioId <= 0) {
+    if (!sistolica || !diastolica || !observacao) {
       return res.status(400).json({ message: "Todos os campos são obrigatórios." });
+    }
+
+    const dadosSaude = await prisma.dadosSaude.findUnique({
+      where: { usuarioId },
+    });
+
+    const sistNormal = dadosSaude?.pressaoSistolicaNormal ?? 120;
+    const diasNormal = dadosSaude?.pressaoDiastolicaNormal ?? 80;
+
+
+    let status = "NORMAL";
+
+    if (sistolica >= sistNormal + 15 || diastolica >= diasNormal + 10) {
+      status = "HIPERTENSÃO";
+    } else if (sistolica < sistNormal - 15 || diastolica < diasNormal - 10) {
+      status = "BAIXA";
     }
 
     const novaMedicao = await prisma.medicao.create({
       data: {
         sistolica: Number(sistolica),
         diastolica: Number(diastolica),
-        status,
         observacao,
+        status,
         usuarioId,
       },
     });
 
-     return res.status(201).json({
+    const usuario = await prisma.usuario.findUnique({
+      where: { id: usuarioId },
+      select: { email: true, nome: true }
+    });
+
+    if (status === "HIPERTENSÃO" && usuario?.email) {
+      await sendHypertensionAlertEmail(
+        usuario.email,
+        usuario.nome,
+        Number(sistolica),
+        Number(diastolica)
+      );
+    }
+
+    return res.status(201).json({
       message: "Medição registrada com sucesso.",
       medicao: novaMedicao,
     });
@@ -37,7 +68,7 @@ export const inserirMedicao = async (req: AuthRequest, res: Response) => {
 export const buscarMedicoesDoUsuario = async (req: AuthRequest, res: Response) => {
   const usuarioId = req.user!.id;
 
-   try {
+  try {
     const medicoes = await prisma.medicao.findMany({
       where: { usuarioId },
       orderBy: { dataMedicao: 'desc' },
@@ -87,7 +118,7 @@ export const deletarMedicao = async (req: AuthRequest, res: Response) => {
       where: { id: medicaoId, usuarioId },
     });
 
-     if (!medicao) {
+    if (!medicao) {
       return res.status(404).json({ message: "Medição não encontrada ou não pertence ao usuário." });
     }
 
@@ -103,13 +134,13 @@ export const deletarMedicao = async (req: AuthRequest, res: Response) => {
 export const atualizarMedicao = async (req: AuthRequest, res: Response) => {
   const medicaoId = Number(req.params.id);
   const usuarioId = req.user!.id;
-  const { sistolica, diastolica, observacao, status } = req.body;
+  const { sistolica, diastolica, observacao } = req.body;
 
   if (isNaN(medicaoId)) {
     return res.status(400).json({ message: "ID inválido." });
   }
 
-  if (!sistolica || !diastolica || !status || !observacao) {
+  if (!sistolica || !diastolica || !observacao) {
     return res.status(400).json({ message: "Todos os campos são obrigatórios." });
   }
 
@@ -122,6 +153,21 @@ export const atualizarMedicao = async (req: AuthRequest, res: Response) => {
       return res.status(404).json({ message: "Medição não encontrada ou não pertence ao usuário." });
     }
 
+    const dadosSaude = await prisma.dadosSaude.findUnique({
+      where: { usuarioId },
+    });
+
+    const sistNormal = dadosSaude?.pressaoSistolicaNormal ?? 120;
+    const diasNormal = dadosSaude?.pressaoDiastolicaNormal ?? 80;
+
+    let status = "NORMAL";
+
+    if (sistolica >= sistNormal + 15 || diastolica >= diasNormal + 10) {
+      status = "HIPERTENSÃO";
+    } else if (sistolica < sistNormal - 15 || diastolica < diasNormal - 10) {
+      status = "BAIXA";
+    }
+
     const medicaoAtualizada = await prisma.medicao.update({
       where: { id: medicaoId },
       data: {
@@ -132,12 +178,29 @@ export const atualizarMedicao = async (req: AuthRequest, res: Response) => {
       },
     });
 
+    const usuario = await prisma.usuario.findUnique({
+      where: { id: usuarioId },
+      select: { email: true, nome: true }
+    });
+
+    if (status === "HIPERTENSÃO" && usuario?.email) {
+      await sendHypertensionAlertEmail(
+        usuario.email,
+        usuario.nome,
+        Number(sistolica),
+        Number(diastolica)
+      );
+    }
+
     return res.status(200).json({
-      message: "Medição atualizada com sucesso.",
+      message: "Medição atualizada com sucesso!",
       medicao: medicaoAtualizada,
     });
+
   } catch (error) {
     console.error("Erro ao atualizar medição:", error);
-    return res.status(500).json({ message: "Erro ao atualizar medição. Tente novamente mais tarde." });
+    return res.status(500).json({ message: "Erro ao atualizar medição. Tente novamente." });
   }
 };
+
+

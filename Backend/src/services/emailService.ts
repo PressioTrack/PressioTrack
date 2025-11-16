@@ -40,3 +40,38 @@ export const sendPasswordResetEmail = async (toEmail: string, token: string) => 
     console.log(`Email de redefinição enviado para: ${toEmail}`);
 };
 
+export const sendHypertensionAlertEmail = async (
+    toEmail: string,
+    nome: string | undefined,
+    sistolica: number,
+    diastolica: number
+) => {
+    await transporter.sendMail({
+        from: `"PressioTrack" <${EMAIL_USER}>`,
+        to: toEmail,
+        subject: "⚠ Alerta de Hipertensão Detectada",
+        html: `
+            <h2 style="color:#d32f2f;">⚠ Alerta de Hipertensão</h2>
+
+            <p>Olá <strong>${nome || "usuário"}</strong>,</p>
+
+            <p>Foi detectado um registro de pressão arterial acima dos limites considerados seguros:</p>
+
+            <p style="font-size: 20px; margin: 15px 0;">
+                <strong>${sistolica}/${diastolica} mmHg</strong>
+            </p>
+
+            <p>
+                Recomendamos monitorar suas próximas medições e buscar aconselhamento profissional se necessário.
+            </p>
+
+            <p style="margin-top: 20px; font-size: 12px; opacity: 0.8;">
+                PressioTrack – Monitoramento de Pressão Arterial
+            </p>
+        `,
+    });
+
+    console.log(`Email de alerta de hipertensão enviado para: ${toEmail}`);
+};
+
+
