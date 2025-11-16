@@ -3,7 +3,7 @@ import api from "../utils/api";
 export const createMedicao = async (medicaoData: {
   sistolica: number;
   diastolica: number;
-  status: string;
+  status?: string;
   observacao: string;
 }) => {
   const res = await api.post("/inserir", medicaoData);
@@ -25,7 +25,7 @@ export const updateMedicao = async (
   medicaoData: {
     sistolica: number;
     diastolica: number;
-    status: string;
+    status?: string;
     observacao: string;
   }
 ) => {

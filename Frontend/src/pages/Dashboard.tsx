@@ -98,11 +98,7 @@ const Dashboard: React.FC = () => {
 
     const obs = observacao && observacao.trim().length > 0 ? observacao.trim() : "Sem observação";
 
-    let status = "NORMAL";
-    if (sist >= pressaoSistolicaNormal + 15 || dia >= pressaoDiastolicaNormal + 10) status = "HIPERTENSÃO";
-    else if (sist < pressaoSistolicaNormal - 15 || dia < pressaoDiastolicaNormal - 10) status = "BAIXA";
-
-    const payload = { sistolica: sist, diastolica: dia, observacao: obs, status };
+    const payload = { sistolica: sist, diastolica: dia, observacao: obs };
 
     try {
       if (editando) {
@@ -283,7 +279,7 @@ const Dashboard: React.FC = () => {
           </div>
         </form>
 
-        <Grafico medicoes={medicoes.slice(-7)} />
+        <Grafico medicoes={medicoes} />
       </div>
 
       <div className={styles.cardDireita}>

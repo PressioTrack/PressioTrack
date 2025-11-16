@@ -49,7 +49,7 @@ const Grafico: React.FC<GraficoProps> = ({ medicoes }) => {
 
     return (
         <div className={styles.container}>
-            <h3 className={styles.title}>Gráfico de Medições (7 dias)</h3>
+            <h3 className={styles.title}>Gráfico de Medições (7 últimas)</h3>
 
             <div id="grafico-pdf">
                 <ResponsiveContainer width="100%" height={350}>
