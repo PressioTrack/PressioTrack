@@ -144,21 +144,24 @@ const Dashboard: React.FC = () => {
     const doc = new jsPDF("p", "mm", "a4");
     const pageWidth = doc.internal.pageSize.getWidth();
 
-    const logoWidth = 100;
-    const logoHeight = 25;
-    const logoX = (pageWidth - logoWidth) / 2;
-    const logoY = 10;
+    try {
+      const logoWidth = 90;
+      const logoHeight = 25;
+      const logoX = (pageWidth - logoWidth) / 2;
+      const logoY = 10;
 
-    doc.addImage(logoImg, "PNG", logoX, logoY, logoWidth, logoHeight);
+      doc.addImage(logoImg, "PNG", logoX, logoY, logoWidth, logoHeight);
+    } catch (e) {
+      console.warn("Erro ao carregar logo no PDF:", e);
+    }
+
     doc.setFontSize(16);
-    doc.text(
-      "Relatório de Medições - Últimos 30 dias",
-      pageWidth / 2,
-      logoY + logoHeight + 10,
-      { align: "center" }
-    );
+    doc.text("Relatório de Medições - Últimos 30 dias", pageWidth / 2, 45, {
+      align: "center",
+    });
 
-    let y = logoY + logoHeight + 20;
+    let y = 60;
+
     medicoes.forEach((m, index) => {
       doc.setFontSize(12);
       const linha1 = `${index + 1}. ${m.sistolica} / ${m.diastolica} mmHg - ${m.status}`;
@@ -176,31 +179,37 @@ const Dashboard: React.FC = () => {
       }
 
       y += 4;
-      if (y > 280) {
+
+      if (y > 270) {
         doc.addPage();
         y = 20;
       }
     });
 
-    const svg = document.querySelector(
-      "#grafico-pdf .recharts-wrapper > svg"
-    ) as SVGSVGElement;
-
+    const svg = document.querySelector("#grafico-pdf .recharts-wrapper > svg") as SVGSVGElement;
 
     if (svg) {
-      const imgData = await svgToPng(svg, 900, 400);
+      try {
+        const imgData = await svgToPng(svg, 1000, 450);
 
-      doc.addPage();
-      doc.setFontSize(16);
-      doc.text("Gráfico - Últimos 7 dias", pageWidth / 2, 15, { align: "center" });
+        doc.addPage();
+        doc.setFontSize(16);
+        doc.text("Gráfico - Últimos 7 dias", pageWidth / 2, 15, { align: "center" });
 
-      const pdfWidth = pageWidth - 20;
-      const pdfHeight = (pdfWidth * 400) / 900;
+        const pdfWidth = pageWidth - 20;
+        const pdfHeight = (pdfWidth * 450) / 1000;
 
-      doc.addImage(imgData, "PNG", 10, 25, pdfWidth, pdfHeight);
+        doc.addImage(imgData, "PNG", 10, 25, pdfWidth, pdfHeight);
+      } catch (err) {
+        console.error("Erro ao converter SVG do gráfico:", err);
+        displayMessage("Falha ao gerar imagem do gráfico.", "error");
+      }
     }
+
     doc.save("medicoes.pdf");
   };
+
+
 
   return (
     <div className={styles.container}>

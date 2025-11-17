@@ -89,92 +89,54 @@ const Reset: React.FC = () => {
 
                 {erro && (
                     <div
-                        className={`p-3 mb-4 text-sm border rounded-lg 
-                    ${isSuccessMessage
-                                ? 'text-green-700 bg-green-100 border-green-400'
-                                : 'text-red-700 bg-red-100 border-red-400'
-                            }`}
-                        role="alert"
-                    >
-                        {erro}
+                        className={`${styles.alert} ${isSuccessMessage ? styles.success : styles.error}`} role="alert">{erro}
                     </div>
                 )}
 
-
-                <form onSubmit={handleSubmit} className="flex flex-col gap-4" style={{ display: isSuccessMessage ? 'none' : 'flex' }}>
-
-
-                    <div className={styles.senhaContainer}>
-                        <label htmlFor="senha" className="text-center text-sm font-medium mb-1 text-gray-700">Nova Senha</label>
-                        <div className={styles.inputWrapper}>
-                            <input
-                                id="senha"
-                                type={showSenha ? 'text' : 'password'}
-                                value={senha}
-                                onChange={(e) => setSenha(e.target.value)}
-                                className={styles.input}
-                                required
-                                minLength={6}
-                                disabled={loading || !!erro}
-                                placeholder="Mínimo de 6 caracteres"
-                            />
-                            <span className={styles.olho} onClick={() => setShowSenha(!showSenha)}>
-                                {showSenha ? <AiOutlineEyeInvisible /> : <AiOutlineEye />}
-                            </span>
+                {!isSuccessMessage && (
+                    <form onSubmit={handleSubmit} className={styles.form}>
+                        <div className={styles.senhaContainer}>
+                            <label htmlFor="senha" className={styles.label}>
+                                Nova Senha
+                            </label>
+                            <div className={styles.inputWrapper}>
+                                <input id="senha" type={showSenha ? 'text' : 'password'} value={senha} onChange={(e) => setSenha(e.target.value)} className={styles.input} placeholder="Mínimo de 6 caracteres" minLength={6} disabled={loading} required />
+                                <span className={styles.olho} onClick={() => setShowSenha(!showSenha)}>
+                                    {showSenha ? <AiOutlineEyeInvisible /> : <AiOutlineEye />}
+                                </span>
+                            </div>
                         </div>
-                    </div>
 
-                    <div className={styles.senhaContainer}>
-                        <label htmlFor="confirmarSenha" className="text-center text-sm font-medium mb-1 text-gray-700">Confirmar Nova Senha</label>
-                        <div className={styles.inputWrapper}>
-                            <input
-                                id="confirmarSenha"
-                                type={showConfirmar ? 'text' : 'password'}
-                                value={confirmarSenha}
-                                onChange={(e) => setConfirmarSenha(e.target.value)}
-                                className={`${styles.input} ${senhaInvalida ? 'border-red-500' : ''}`}
-                                required
-                                minLength={6}
-                                disabled={loading || !!erro}
-                                placeholder="Mínimo de 6 caracteres"
-                            />
-                            <span className={styles.olho} onClick={() => setShowConfirmar(!showConfirmar)}>
-                                {showConfirmar ? <AiOutlineEyeInvisible /> : <AiOutlineEye />}
-                            </span>
+                        <div className={styles.senhaContainer}>
+                            <label htmlFor="confirmarSenha" className={styles.label}>
+                                Confirmar Nova Senha
+                            </label>
+                            <div className={styles.inputWrapper}>
+                                <input id="confirmarSenha" type={showConfirmar ? 'text' : 'password'} value={confirmarSenha} onChange={(e) => setConfirmarSenha(e.target.value)} className={`${styles.input} ${senhaInvalida ? styles.inputError : ''}`} placeholder="Mínimo de 6 caracteres" minLength={6} disabled={loading} required />
+                                <span className={styles.olho} onClick={() => setShowConfirmar(!showConfirmar)}>
+                                    {showConfirmar ? <AiOutlineEyeInvisible /> : <AiOutlineEye />}
+                                </span>
+                            </div>
                         </div>
-                    </div>
 
+                        {senhaInvalida && (
+                            <p className={styles.errorText}>As senhas digitadas não são iguais.</p>
+                        )}
 
-                    {senhaInvalida && (
-                        <p className="text-sm text-red-600 -mt-2">As senhas digitadas não são iguais.</p>
-                    )}
-
-
-                    <button
-                        type="submit"
-                        className={`
-                                    w-full py-2 px-4 rounded-lg font-semibold transition duration-200 mt-2
-                            ${isDisabled
-                                ? 'bg-green-600 text-white opacity-50 cursor-not-allowed'
-                                : 'bg-green-600 text-white hover:bg-green-700'
-                            }
-            `}
-                        disabled={isDisabled}
-                    >
-                        {loading ? 'Salvando...' : 'Redefinir Senha'}
-                    </button>
-                </form>
-
+                        <button type="submit" className={`${styles.button} ${isDisabled ? styles.disabled : ''}`} disabled={isDisabled}>
+                            {loading ? 'Salvando...' : 'Redefinir Senha'}
+                        </button>
+                    </form>
+                )}
 
                 {(!token || !isSuccessMessage) && (
-                    <div className="mt-6 text-center">
-                        <a href="/forgot" className="text-sm font-medium text-gray-600 hover:text-green-600 transition duration-150">
+                    <div className={styles.linkContainer}>
+                        <a href="/forgot" className={styles.link}>
                             Solicitar novo link de redefinição
                         </a>
                     </div>
                 )}
             </div>
-
         </div>
     );
 };

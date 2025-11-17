@@ -22,6 +22,8 @@ model Usuario{
   medicoes Medicao[]
   resetToken String?    
   resetTokenExpiry DateTime?
+  associacaoToken String?
+  associacaoTokenExpiry DateTime?
   criadoEm DateTime @default(now())
   @@map("usuarios")
 }

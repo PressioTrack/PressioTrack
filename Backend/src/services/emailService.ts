@@ -74,4 +74,43 @@ export const sendHypertensionAlertEmail = async (
     console.log(`Email de alerta de hipertensão enviado para: ${toEmail}`);
 };
 
+export const sendCaregiverAssociationEmail = async ({
+  cuidadorEmail,
+  cuidadorNome,
+  cuidadorId,
+  pacienteId,
+  pacienteNome,
+  token
+}: {
+  cuidadorEmail: string,
+  cuidadorNome?: string,
+  cuidadorId: number,
+  pacienteId: number,
+  pacienteNome: string,
+  token: string
+}) => {
+
+const link = `${process.env.FRONTEND_URL}/associacao/confirmar?token=${token}&cuidadorId=${cuidadorId}`;
+
+  await transporter.sendMail({
+    from: `"PressioTrack" <${EMAIL_USER}>`,
+    to: cuidadorEmail,
+    subject: `Pedido de associação - ${pacienteNome}`,
+    html: `
+      <h2>Associação de Paciente</h2>
+
+      <p>Olá <strong>${cuidadorNome}</strong>,</p>
+
+      <p>O paciente <strong>${pacienteNome}</strong> deseja vinculá-lo como cuidador.</p>
+
+      <p>Clique no link para confirmar:</p>
+
+      <p><a href="${link}">Confirmar associação</a></p>
+
+      <p>Este link expira em 24 horas.</p>
+    `
+  });
+
+  console.log(`Email de associação enviado para cuidador: ${cuidadorEmail}`);
+};
 

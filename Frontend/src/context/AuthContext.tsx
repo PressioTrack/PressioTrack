@@ -11,6 +11,7 @@ type AuthContextType = {
   refreshUser: () => Promise<void>;
   forgotPassword: (email: string) => Promise<{ ok: boolean; message?: string }>;
   resetPassword: (token: string, senha: string) => Promise<{ ok: boolean; message?: string }>;
+  updateUser: (user: User | null) => void;
 };
   
 
@@ -120,6 +121,9 @@ const resetPassword = async (token: string, senha: string) => {
   }
 }
 
+const updateUser = (newUser: User | null) => {
+    setUser(newUser);
+  };
 
   return (
     <AuthContext.Provider
@@ -132,6 +136,7 @@ const resetPassword = async (token: string, senha: string) => {
         refreshUser,
         forgotPassword,
         resetPassword,
+         updateUser,
       }}
     >
       {children}

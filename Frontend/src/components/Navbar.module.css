@@ -42,9 +42,9 @@
 }
 
 .button {
-  @apply flex-1 py-1.5 px-3 rounded-lg font-semibold transition-all text-sm;
+  @apply py-1.5 px-3 rounded-lg font-semibold transition-all text-sm whitespace-nowrap;
   background-color: var(--blue) !important; 
-  color: #ffffff !important; 
+  color: #ffffff !important;
   border: 1px solid rgba(0, 0, 0, 0.05);
 }
 

@@ -23,6 +23,14 @@ const Navbar: React.FC = () => {
     navigate("/dashboard");
   };
 
+  const handleAssociacao = () => {
+    navigate("/associacao");
+  };
+
+  const handleNavigate = (path: string) => {
+    navigate(path);
+  };
+
   return (
     <nav className={`${styles.nav} ${isAuthPage ? styles.authNav : styles.loggedNav}`}>
       <div className={isAuthPage ? styles.center : styles.left}>
@@ -33,12 +41,31 @@ const Navbar: React.FC = () => {
 
       {!isAuthPage && (
         <div className={styles.right}>
-           <button className={styles.button} onClick={handleDashboard}>
+          <button className={styles.button} onClick={handleDashboard}>
             DASHBOARD
           </button>
           <button className={styles.button} onClick={handlePerfil}>
             PERFIL
           </button>
+
+          {user?.perfil === "PACIENTE" && !user?.cuidadorId && (
+            <button className={styles.button} onClick={() => handleNavigate("/associacao")}>
+              ASSOCIAR CUIDADOR
+            </button>
+          )}
+
+          {user?.perfil === "PACIENTE" && user?.cuidadorId && (
+            <button className={styles.button} onClick={() => handleNavigate("/associacao")}>
+              VER CUIDADOR
+            </button>
+          )}
+
+          {user?.perfil === "CUIDADOR" && (
+            <button className={styles.button} onClick={() => navigate("/meus-pacientes")}>
+              MEUS PACIENTES
+            </button>
+          )}
+
           <button className={styles.button} onClick={handleLogout}>
             SAIR
           </button>

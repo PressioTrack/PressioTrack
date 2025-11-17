@@ -10,4 +10,8 @@ export interface User {
   telefone: string;
   idade: number;
   dadosSaude?: DadosSaude;
+  cuidadorId?: string | number | null;
+
+  cuidador?: { nome: string; email: string; } | null;
 }
+
