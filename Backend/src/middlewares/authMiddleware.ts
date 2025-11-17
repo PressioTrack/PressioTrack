@@ -6,7 +6,9 @@ export interface AuthRequest extends Request {
     user?: {
         id: number;
         email: string;
+        nome: string;
         perfil: 'PACIENTE' | 'CUIDADOR';
+        cuidadorId?: number;
     };
 }
 
@@ -24,7 +26,9 @@ export const authenticateToken = (
         const decoded = jwt.verify(token, JWT_SECRET) as {
             id: number;
             email: string;
+            nome: string;
             perfil: 'PACIENTE' | 'CUIDADOR';
+            cuidadorId?: number;
         };
 
         req.user = decoded;

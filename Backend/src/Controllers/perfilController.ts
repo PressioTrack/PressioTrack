@@ -16,6 +16,13 @@ export const getPerfil = async (req: AuthRequest, res: Response) => {
       where: { id: userId },
       include: {
         dadosSaude: true,
+        cuidador: {
+          select: {
+            id: true,
+            nome: true,
+            email: true,
+          }
+        }
       },
     });
 
@@ -40,6 +47,7 @@ export const getPerfil = async (req: AuthRequest, res: Response) => {
     res.status(500).json({ message: "Erro ao buscar perfil do usuário" });
   }
 };
+
 
 export const atualizarPerfil = async (req: AuthRequest, res: Response) => {
   try {

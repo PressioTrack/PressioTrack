@@ -14,8 +14,15 @@ type GraficoProps = {
 
 const Grafico: React.FC<GraficoProps> = ({ medicoes }) => {
 
+    const ultimasMedicoes = useMemo(() => {
+        const ordenadas = [...medicoes].sort(
+            (a, b) => new Date(a.dataMedicao).getTime() - new Date(b.dataMedicao).getTime()
+        );
+        return ordenadas.slice(-7);
+    }, [medicoes]);
+
     const data = useMemo(() => {
-        return medicoes.map((m) => ({
+        return ultimasMedicoes.map((m) => ({
             data: new Date(m.dataMedicao).toLocaleTimeString([], {
                 hour: "2-digit",
                 minute: "2-digit",
@@ -23,15 +30,14 @@ const Grafico: React.FC<GraficoProps> = ({ medicoes }) => {
             sistolica: m.sistolica,
             diastolica: m.diastolica,
         }));
-    }, [medicoes]);
+    }, [ultimasMedicoes]);
 
-    const sistolicas = medicoes.map((m) => Number(m.sistolica));
-    const diastolicas = medicoes.map((m) => Number(m.diastolica));
+    const sistolicas = ultimasMedicoes.map((m) => Number(m.sistolica));
+    const diastolicas = ultimasMedicoes.map((m) => Number(m.diastolica));
 
     const calcularMedia = (valores: number[]): number => {
         if (valores.length === 0) return 0;
-        const soma = valores.reduce((acc, val) => acc + val, 0);
-        return soma / valores.length;
+        return valores.reduce((acc, val) => acc + val, 0) / valores.length;
     };
 
     const calcularDesvioPadrao = (valores: number[]): number => {
@@ -64,26 +70,23 @@ const Grafico: React.FC<GraficoProps> = ({ medicoes }) => {
                     </LineChart>
                 </ResponsiveContainer>
             </div>
+
             <div className={styles.desvioContainer}>
                 <h4 className={styles.desvioTitle}>Desvio Padrão das Medições</h4>
-
                 <p className={styles.desvioItem}>
-                   <strong>Sistólica:</strong> desvio {desvioSist.toFixed(2)} mmHg - média {mediaSist.toFixed(1)}  
+                    <strong>Sistólica:</strong> desvio {desvioSist.toFixed(2)} mmHg - média {mediaSist.toFixed(1)}
                 </p>
-
                 <p className={styles.desvioItem}>
-                  <strong>Diastólica:</strong> desvio {desvioDia.toFixed(2)} mmHg - média {mediaDia.toFixed(1)} 
+                    <strong>Diastólica:</strong> desvio {desvioDia.toFixed(2)} mmHg - média {mediaDia.toFixed(1)}
                 </p>
-
                 <p className={styles.desvioInfo}>
                     O desvio padrão indica a variação das medições. Valores menores significam
                     medições mais consistentes; valores maiores indicam maior variação da pressão.
                 </p>
             </div>
-
-
         </div>
     );
 };
+
 
 export default Grafico;

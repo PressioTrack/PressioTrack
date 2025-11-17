@@ -1,0 +1,36 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --blue: #005954;
+  --blue2: #5dc1b9;
+  --white: #ffffff;
+  --grey: #e5e7eb;
+  --grey2: #d1d5db;
+  --green: #22c55e;
+}
+
+.container {
+  @apply p-6 min-h-screen bg-gradient-to-b from-green-50 to-white;
+}
+
+.title {
+  @apply text-2xl font-bold text-[var(--blue)] mb-4;
+}
+
+.exportButton {
+  @apply mb-4 px-4 py-2 bg-[var(--blue)] text-white rounded hover:bg-[var(--blue2)] transition-colors;
+}
+
+.errorMessage {
+  @apply text-red-600 bg-red-100 p-3 rounded-md mb-4 text-center;
+}
+
+.loadingMessage {
+  @apply text-gray-600 italic text-center;
+}
+
+.graficoContainer {
+  @apply bg-white p-4 rounded-2xl shadow-md;
+}

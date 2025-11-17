@@ -8,20 +8,19 @@
   --blue2: #5DC1B9;
   --black: #000000;
   --gray-bg: #f9fafb;
+  --red: #dc2626;
+  --green: #16a34a;
+  --green-dark: #15803d;
 }
 
 .container {
-  @apply flex justify-center items-center min-h-screen bg-gray-50 px-4;
+  @apply flex justify-center items-center min-h-screen px-4 bg-gray-50;
   background-color: var(--gray-bg);
 }
 
 .card {
-  @apply w-full max-w-md p-8 rounded-2xl shadow-lg text-center bg-white;
-  border: 1px solid rgba(0, 179, 179, 0.15);
-  max-height: 90vh;
-  overflow-y: auto;
-  scrollbar-width: thin;
-  scrollbar-color: var(--blue2) transparent;
+  @apply w-full max-w-md p-8 rounded-2xl shadow-lg text-center bg-white border overflow-y-auto max-h-[90vh];
+  border-color: rgba(0, 179, 179, 0.15);
 }
 
 .title {
@@ -29,29 +28,64 @@
   color: var(--blue);
 }
 
-.instruction {
-  @apply text-sm text-gray-600 mb-6;
+.alert {
+  @apply p-3 mb-4 text-sm rounded-lg;
+}
+
+.error {
+  @apply text-red-700 bg-red-100 border border-red-400;
+}
+
+.success {
+  @apply text-green-700 bg-green-100 border border-green-400;
+}
+
+.form {
+  @apply flex flex-col gap-4;
+}
+
+.senhaContainer {
+  @apply flex flex-col relative;
 }
 
 .label {
-  @apply block text-sm font-medium text-gray-700 mb-1;
+  @apply text-sm font-medium text-gray-700 mb-1;
   color: var(--black);
 }
 
+.inputWrapper {
+  @apply relative;
+}
+
 .input {
-  @apply w-full px-3 py-2 border rounded-lg transition-all duration-200;
-  border-color: rgba(0, 0, 0, 0.2);
+  @apply w-full px-3 py-2 border rounded-lg text-sm outline-none;
+  border-color: rgba(0,0,0,0.2);
   background-color: var(--white);
 }
 
 .input:focus {
-  @apply outline-none ring-2;
+  @apply ring-2 outline-none;
   ring-color: var(--blue);
   border-color: var(--blue);
 }
+.inputError {
+  @apply border-red-500;
+}
+
+.olho {
+  @apply absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 cursor-pointer text-xl transition-colors;
+}
+
+.olho:hover {
+  @apply text-gray-700;
+}
+
+.errorText {
+  @apply text-sm text-red-600 -mt-2;
+}
 
 .button {
-  @apply w-full py-2 px-4 rounded-lg font-semibold transition-all text-sm;
+  @apply w-full py-2 px-4 rounded-lg font-semibold text-sm transition-all;
   background-color: var(--blue) !important;
   color: var(--white) !important;
   border: 1px solid rgba(0, 0, 0, 0.05);
@@ -62,33 +96,15 @@
   opacity: 0.95;
 }
 
-.error {
-  @apply text-sm mb-3 text-red-600;
+.disabled {
+  @apply opacity-50 cursor-not-allowed;
 }
 
-.success {
-  @apply text-sm mb-3 text-green-600;
+.linkContainer {
+  @apply mt-6 text-center;
 }
 
 .link {
+  @apply text-sm font-medium hover:underline transition duration-150;
   color: var(--blue);
-  @apply hover:underline transition-colors duration-200;
 }
-
-.senhaContainer {
-  @apply flex flex-col relative;
-}
-
-.inputWrapper {
-  @apply relative;
-}
-
-.olho {
-  @apply absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 cursor-pointer transition;
-  font-size: 1.2rem;
-}
-
-.olho:hover {
-  @apply text-gray-700;
-}
-

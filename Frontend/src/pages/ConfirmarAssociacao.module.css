@@ -1,0 +1,43 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --white: #ffffff;
+  --blue: #005954;
+  --blue2: #5dc1b9;
+  --green: #22c55e;
+  --green2: #16a34a;
+  --red: #ef4444;
+  --red2: #b91c1c;
+  --grey: #e5e7eb;
+  --grey2: #d1d5db;
+}
+
+.container {
+  @apply min-h-screen flex items-center justify-center bg-gradient-to-b from-green-50 to-white p-6;
+}
+
+.card {
+  @apply bg-white p-8 rounded-2xl shadow-xl max-w-md w-full text-center flex flex-col gap-6;
+}
+
+.title {
+  @apply text-2xl font-bold text-[var(--blue)];
+}
+
+.mensagem {
+  @apply p-4 rounded-lg text-sm font-medium border;
+}
+
+.sucesso {
+  @apply bg-green-100 text-green-800 border-green-300;
+}
+
+.erro {
+  @apply bg-red-100 text-red-800 border-red-300;
+}
+
+.loading {
+  @apply text-gray-600 italic;
+}

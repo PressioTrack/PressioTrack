@@ -3,32 +3,32 @@ import { PrismaClient, Prisma } from "@prisma/client";
 import * as argon2 from "argon2";
 import jwt from "jsonwebtoken";
 import * as crypto from 'crypto';
-import { sendPasswordResetEmail, ADMIN_CONTACT_EMAIL } from '../services/emailService'; 
+import { sendPasswordResetEmail, ADMIN_CONTACT_EMAIL } from '../services/emailService';
 import { AuthRequest, authorizePaciente, authenticateToken } from "../middlewares/authMiddleware";
 
 const prisma = new PrismaClient();
 const JWT_SECRET = process.env.JWT_SECRET!;
-const JWT_EXPIRATION_MS = 24 * 60 * 60 * 1000; 
+const JWT_EXPIRATION_MS = 24 * 60 * 60 * 1000;
 const RESET_TOKEN_EXPIRATION_HOURS = 1;
-const ACTIVATION_TOKEN_EXPIRATION_HOURS = 24; 
+const ACTIVATION_TOKEN_EXPIRATION_HOURS = 24;
 
 export const register = async (req: Request, res: Response) => {
     const { nome, email, senha, perfil, telefone, idade } = req.body;
 
     const idadeNumber = Number(idade);
-    if (!nome || !email || !senha || !perfil || !telefone ||  isNaN(idadeNumber)) {
+    if (!nome || !email || !senha || !perfil || !telefone || isNaN(idadeNumber)) {
         return res.status(400).json({ message: "Todos os campos são obrigatórios e a senha deve conter no minímo 6 caracteres" })
     }
     if (senha.length < 6) {
         return res
-          .status(400)
-          .json({ message: "A senha deve conter no mínimo 6 caracteres." });
-      }
-    
+            .status(400)
+            .json({ message: "A senha deve conter no mínimo 6 caracteres." });
+    }
+
     try {
-        
+
         const activationToken = crypto.randomBytes(32).toString('hex');
-        const hashedActivationToken = await argon2.hash(activationToken);  
+        const hashedActivationToken = await argon2.hash(activationToken);
 
         const activationTokenExpiry = new Date(Date.now() + ACTIVATION_TOKEN_EXPIRATION_HOURS * 60 * 60 * 1000);
 
@@ -41,14 +41,15 @@ export const register = async (req: Request, res: Response) => {
                 perfil,
                 telefone,
                 idade: Number(idade),
-                resetToken: hashedActivationToken, 
+                resetToken: hashedActivationToken,
                 resetTokenExpiry: activationTokenExpiry,
             },
-            select: { id: true, email: true, nome: true, perfil: true, telefone: true, idade:true, cuidadorId: true, criadoEm: true }
+            select: { id: true, email: true, nome: true, perfil: true, telefone: true, idade: true, cuidadorId: true, criadoEm: true }
         });
-        
+
         const tokenPayload = {
             id: novoUsuario.id,
+            nome: novoUsuario.nome,
             perfil: novoUsuario.perfil,
             email: novoUsuario.email
         }
@@ -99,6 +100,7 @@ export const login = async (req: Request, res: Response) => {
         }
         const tokenPayload = {
             id: usuario.id,
+            nome: usuario.nome,
             perfil: usuario.perfil,
             email: usuario.email
         }
@@ -147,21 +149,21 @@ export const forgotPassword = async (req: Request, res: Response) => {
 
         if (!usuario) {
             console.log(`Tentativa de redefinição para email inexistente: ${email}`);
-            return res.status(200).json({ 
-                message: 'Se o email estiver cadastrado, um link de redefinição será enviado.' 
+            return res.status(200).json({
+                message: 'Se o email estiver cadastrado, um link de redefinição será enviado.'
             });
         }
 
         const resetToken = crypto.randomBytes(32).toString('hex');
-        const hashedToken = await argon2.hash(resetToken); 
-        
+        const hashedToken = await argon2.hash(resetToken);
+
         const resetTokenExpiry = new Date(Date.now() + RESET_TOKEN_EXPIRATION_HOURS * 60 * 60 * 1000);
 
         await prisma.usuario.update({
             where: { id: usuario.id },
-            data: { 
-                resetToken: hashedToken, 
-                resetTokenExpiry: resetTokenExpiry 
+            data: {
+                resetToken: hashedToken,
+                resetTokenExpiry: resetTokenExpiry
             },
         });
 
@@ -179,7 +181,7 @@ export const forgotPassword = async (req: Request, res: Response) => {
     }
 };
 export const resetPassword = async (req: Request, res: Response) => {
-    const { token, novaSenha } = req.body; 
+    const { token, novaSenha } = req.body;
 
     if (!token || !novaSenha || novaSenha.length < 6) {
         return res.status(400).json({ message: 'Token e nova senha válidos (mínimo 6 caracteres) são obrigatórios.' });
@@ -188,13 +190,13 @@ export const resetPassword = async (req: Request, res: Response) => {
     try {
         const usuarioComToken = await prisma.usuario.findFirst({
             where: {
-                resetToken: { not: null }, 
-                resetTokenExpiry: { gt: new Date() }, 
+                resetToken: { not: null },
+                resetTokenExpiry: { gt: new Date() },
             },
         });
 
         if (!usuarioComToken) {
-             return res.status(400).json({ message: 'Token inválido ou expirado.' });
+            return res.status(400).json({ message: 'Token inválido ou expirado.' });
         }
 
         const tokenValido = await argon2.verify(usuarioComToken.resetToken as string, token);
@@ -209,13 +211,13 @@ export const resetPassword = async (req: Request, res: Response) => {
             where: { id: usuarioComToken.id },
             data: {
                 senha: hashedNewPassword,
-                resetToken: null,           
-                resetTokenExpiry: null,     
+                resetToken: null,
+                resetTokenExpiry: null,
             },
         });
 
-        return res.status(200).json({ 
-            message: 'Senha redefinida com sucesso! Você já pode fazer login com sua nova senha.' 
+        return res.status(200).json({
+            message: 'Senha redefinida com sucesso! Você já pode fazer login com sua nova senha.'
         });
 
     } catch (error) {

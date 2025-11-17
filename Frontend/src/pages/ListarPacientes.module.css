@@ -1,0 +1,45 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --white: #ffffff;
+  --blue: #005954;
+  --blue2: #5dc1b9;
+  --grey: #e5e7eb;
+  --grey2: #d1d5db;
+  --green: #22c55e;
+  --red: #ef4444;
+}
+
+.container {
+  @apply p-6 min-h-screen bg-gradient-to-b from-green-50 to-white;
+}
+
+.title {
+  @apply text-2xl font-bold text-[var(--blue)] mb-4;
+}
+
+.listaPacientes {
+  @apply flex flex-col gap-3;
+}
+
+.pacienteCard {
+  @apply p-4 border border-gray-200 rounded-xl shadow-sm bg-white cursor-pointer transition hover:bg-[var(--grey)] hover:shadow-md;
+}
+
+.pacienteNome {
+  @apply font-semibold text-[var(--blue2)];
+}
+
+.pacienteEmail {
+  @apply text-gray-600 text-sm;
+}
+
+.semPacientes {
+  @apply text-gray-500 text-center mt-6;
+}
+
+.loading {
+  @apply text-gray-600 italic text-center mt-6;
+}
