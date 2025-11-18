@@ -26,7 +26,7 @@ module.exports = {
         container: '1150px',
       },
       fontFamily: {
-        inter: ['Inter', 'system-ui'],
+         sans: ['Roboto', 'ui-sans-serif', 'system-ui'],
       },
     },
   },

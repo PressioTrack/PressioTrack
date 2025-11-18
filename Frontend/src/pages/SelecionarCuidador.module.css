@@ -14,7 +14,7 @@
 }
 
 .container {
-  @apply min-h-screen flex justify-center items-center bg-gradient-to-b from-green-50 to-white p-6;
+  @apply min-h-screen flex justify-center items-center from-green-50 to-white p-6;
 }
 
 .card {

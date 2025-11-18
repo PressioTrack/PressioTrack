@@ -13,7 +13,7 @@
 }
 
 .container {
-  @apply p-6 min-h-screen bg-gradient-to-b from-green-50 to-white;
+  @apply p-6 min-h-screen from-green-50 to-white;
 }
 
 .title {
