@@ -1,0 +1,37 @@
+services:
+  backend:
+    build: ./Backend
+    container_name: backend_app
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./Backend:/app
+      - /app/node_modules
+    environment:
+      DATABASE_URL: "mysql://root:root@mysql:3306/PressioTrack"
+    depends_on:
+      - mysql
+
+  frontend:
+    build: ./Frontend
+    container_name: frontend_app
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./Frontend:/app
+      - /app/node_modules
+
+  mysql:
+    image: mysql:8
+    container_name: mysql_pressiotrack
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: PressioTrack
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+volumes:
+  mysql_data:
