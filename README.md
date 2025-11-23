@@ -1,6 +1,94 @@
 # PressioTrack
 Aplicação dedicada ao monitoramento da pressão arterial em tempo real com relatórios.
 
+# Guia de Deploy e Execução
+
+## 1️⃣ Docker Compose
+
+**Subir containers:**
+
+```bash
+docker compose up --build
+```
+
+**Entrar no container do backend:**
+
+```bash
+docker compose exec backend sh
+```
+
+**Rodar migrations do Prisma:**
+
+```bash
+npx prisma migrate dev
+```
+
+**Entrar no MySQL:**
+
+```bash
+docker compose exec mysql sh
+mysql -u root -p
+# senha: root
+```
+
+**Acessar o frontend:**
+[http://localhost:5173](http://localhost:5173)
+
+---
+
+## 2️⃣ Kubernetes (Kind)
+
+**Entrar na pasta de manifests:**
+
+```bash
+cd k8s
+```
+
+**Dar permissão e rodar deploy:**
+
+```bash
+chmod +x deploy.sh
+./deploy.sh
+```
+
+**Rodar migrations do Prisma no backend:**
+
+```bash
+kubectl exec -it deploy/backend -- npx prisma migrate deploy
+```
+
+**Reiniciar o backend:**
+
+```bash
+kubectl rollout restart deploy/backend
+```
+
+**Acessar o frontend:**
+[http://localhost:5173](http://localhost:5173)
+
+---
+
+## 3️⃣ Rodar normal (sem Docker/Kind)
+
+**Frontend:**
+
+```bash
+cd frontend
+npm run dev
+```
+
+**Backend:**
+
+```bash
+cd backend
+npm start
+```
+
+**Acessar o frontend:**
+[http://localhost:5173](http://localhost:5173)
+
+---
+
 # Autoras 
 - [Alissa Gabriel](https://github.com/AlissaGabriel),
 - [Lara Nicoly Ronchesel Ramos](https://github.com/llnick),
