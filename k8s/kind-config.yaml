@@ -1,0 +1,15 @@
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+name: pressiotrack
+nodes:
+  - role: control-plane
+    extraPortMappings:
+      - containerPort: 30000    
+        hostPort: 5000
+        protocol: TCP
+      - containerPort: 30001    
+        hostPort: 30001
+        protocol: TCP
+      - containerPort: 30306    
+        hostPort: 30306
+        protocol: TCP

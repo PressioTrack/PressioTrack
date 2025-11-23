@@ -65,7 +65,6 @@ const Dashboard: React.FC = () => {
       }
     } catch (err) {
       console.error(err);
-      displayMessage("Erro ao carregar perfil.", "error");
     }
   };
 

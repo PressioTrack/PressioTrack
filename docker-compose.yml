@@ -1,37 +1,52 @@
 services:
-  backend:
-    build: ./Backend
-    container_name: backend_app
-    ports:
-      - "5000:5000"
-    volumes:
-      - ./Backend:/app
-      - /app/node_modules
-    environment:
-      DATABASE_URL: "mysql://root:root@mysql:3306/PressioTrack"
-    depends_on:
-      - mysql
-
-  frontend:
-    build: ./Frontend
-    container_name: frontend_app
-    ports:
-      - "5173:5173"
-    volumes:
-      - ./Frontend:/app
-      - /app/node_modules
-
   mysql:
     image: mysql:8
-    container_name: mysql_pressiotrack
+    container_name: pressiotrack-mysql
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: PressioTrack
     ports:
-      - "3307:3306"
+      - "3306:3306"
     volumes:
       - mysql_data:/var/lib/mysql
+    networks:
+      - pressiotrack_network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
+
+  backend:
+    build: ./Backend
+    container_name: pressiotrack-backend
+    restart: always
+    ports:
+      - "5000:5000"
+    environment:
+      DATABASE_URL: mysql://root:root@mysql:3306/PressioTrack
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - pressiotrack_network
+
+  frontend:
+    build: ./Frontend
+    container_name: pressiotrack-frontend
+    restart: always
+    ports:
+      - "5173:80"
+    environment:
+      VITE_API_URL: http://localhost:5000
+    depends_on:
+      - backend
+    networks:
+      - pressiotrack_network
+
+networks:
+  pressiotrack_network:
+    driver: bridge
 
 volumes:
   mysql_data:
